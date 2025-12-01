@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us - Eventa</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+        body { font-family: 'Poppins', sans-serif; background:#f8fafc; }
+        .page-header { background:linear-gradient(135deg,var(--primary-color),var(--secondary-color)); color:white; padding:6rem 0 5rem; text-align:center; }
+        .page-header h1 { font-size:4rem; font-weight:800; margin:0 0 1rem; }
+        .contact-container { max-width:1100px; margin:0 auto 6rem; padding:0 1.5rem; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+        @media (max-width:992px) { .contact-container { grid-template-columns:1fr; } }
+        .contact-form { background:white; padding:3rem; border-radius:28px; box-shadow:var(--shadow-xl); }
+        .contact-form .form-control { margin-bottom:1.8rem; }
+        .contact-info h3 { font-size:2rem; margin:0 0 2rem; }
+        .info-item { display:flex; gap:1.5rem; margin-bottom:2rem; align-items:flex-start; }
+        .info-item svg { width:50px; height:50px; padding:12px; background:#f0f9ff; color:var(--primary-color); border-radius:50%; flex-shrink:0; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">Eventa</a>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </button>
+
+                <!-- Navigation Menu -->
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link active">Home</a></li>
+                    <li><a href="category.html" class="nav-link">Events</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+
+                <!-- Nav Actions -->
+                <div class="nav-actions">
+
+                    <!-- Guest Only -->
+                    <div class="guest-only">
+                        <a href="login.html" class="btn btn-outline">Login</a>
+                        <a href="register.html" class="btn btn-primary">Sign Up</a>
+                    </div>
+
+                    <!-- Authenticated User -->
+                    <div class="user-only" style="display:none; align-items:center; gap:12px;">
+
+                        <!-- Notifications -->
+                        <a href="Notifications.html" class="icon-btn" title="Notifications">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                            <span class="notification-badge notification-count">0</span>
+                        </a>
+
+                        <!-- Cart -->
+                        <a href="my-tickets.html" class="icon-btn" title="My Tickets">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                            <span class="cart-badge cart-count">0</span>
+                        </a>
+
+                        <!-- Profile Avatar -->
+                        <a href="profile.html" class="icon-btn" id="userAvatar" title="Profile" style="width:44px;height:44px;background:var(--primary-color);color:white;font-weight:700;">
+                            A
+                        </a>
+
+                        <!-- Organizer Dashboard -->
+                        <a href="organizer-dashboard.html" class="btn btn-secondary organizer-only" style="display:none;">Dashboard</a>
+
+                        <!-- Logout -->
+                        <a href="#" id="logoutBtn" class="btn btn-sm" style="background:#ef4444;color:white;">Logout</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="page-header">
+        <div class="container">
+            <h1>Contact Us</h1>
+            <p style="font-size:1.4rem;opacity:0.95;">We're here to help — 24/7 support</p>
+        </div>
+    </div>
+
+    <div class="contact-container">
+        <div class="contact-info">
+            <h3>Get in touch</h3>
+            <div class="info-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <div>
+                    <strong>Email</strong><br>
+                    <a href="mailto:support@eventa.com">support@eventa.com</a>
+                </div>
+            </div>
+            <div class="info-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                <div>
+                    <strong>Phone</strong><br>
+                    +20 123 456 7890
+                </div>
+            </div>
+            <div class="info-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <div>
+                    <strong>Address</strong><br>
+                    Cairo, Egypt
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3 class="logo" style="color:white;font-size:1.8rem;margin-bottom:1rem;">Eventa</h3>
+                <p>Your gateway to unforgettable experiences.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div style="display:flex;gap:1rem;margin-top:1rem;">
+                    <a href="#" style="color:white;font-size:1.5rem;">Facebook</a>
+                    <a href="#" style="color:white;font-size:1.5rem;">Twitter</a>
+                    <a href="#" style="color:white;font-size:1.5rem;">Instagram</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Eventa. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNavbar();
+        });
+    </script>
+</body>
+</html>

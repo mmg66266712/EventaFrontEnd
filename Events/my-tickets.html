@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Tickets - Eventa</title>
+    <meta name="description" content="View and manage all your booked event tickets with scannable QR codes." />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode.js@1.0.0/lib/qrcode.min.js"></script>
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; background:#f8fafc; }
+        
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 6rem 0 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=1920') center/cover no-repeat;
+            opacity: 0.15;
+        }
+        .page-header h1 {
+            font-size: 4.2rem;
+            font-weight: 800;
+            margin: 0 0 1rem;
+            position: relative;
+        }
+        .page-header p {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .tickets-container {
+            max-width: 1400px;
+            margin: 0 auto 6rem;
+            padding: 0 1.5rem;
+        }
+
+        .tickets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.8rem;
+        }
+
+        .ticket-card {
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .ticket-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 35px 80px rgba(99,102,241,0.25);
+        }
+
+        .ticket-status {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: #10b981;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(16,185,129,0.4);
+        }
+
+        .ticket-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        .ticket-header h3 {
+            font-size: 1.8rem;
+            margin: 0 0 0.6rem;
+            font-weight: 700;
+        }
+        .ticket-id {
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        .ticket-body {
+            padding: 2.5rem;
+        }
+
+        .ticket-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+        .ticket-info strong {
+            color: #1e293b;
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+        .ticket-info span {
+            color: #475569;
+        }
+
+        .qr-section {
+            text-align: center;
+            margin: 2.5rem 0;
+            padding: 2rem;
+            background: #f8fafc;
+            border-radius: 24px;
+            border: 3px dashed #e0e7ff;
+        }
+        .qr-section canvas {
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            width: 220px !important;
+            height: 220px !important;
+            margin: 0 auto;
+        }
+        .qr-label {
+            margin-top: 1.2rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .ticket-actions {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+        .btn-print, .btn-download {
+            flex: 1;
+            padding: 1.1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .btn-print {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        .btn-download {
+            background: #f8fafc;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 10rem 2rem;
+            color: #94a3b8;
+        }
+        .empty-state svg {
+            width: 140px;
+            height: 140px;
+            opacity: 0.4;
+            margin-bottom: 2rem;
+        }
+        .empty-state h3 {
+            font-size: 2.2rem;
+            margin: 0 0 1rem;
+            color: #475569;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 3rem; }
+            .tickets-grid { grid-template-columns: 1fr; }
+            .ticket-info { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-overlay"></div>
+
+<header class="header">
+    <div class="container">
+        <nav class="navbar">
+            <a href="index.html" class="logo">Eventa</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+            </button>
+
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="category.html" class="nav-link">Events</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <div class="guest-only">
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <a href="register.html" class="btn btn-primary">Sign Up</a>
+                </div>
+                <div class="user-only" style="display:none;align-items:center;gap:12px;">
+                    <a href="Notifications.html" class="icon-btn" title="Notifications">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="notification-badge notification-count">0</span>
+                    </a>
+                    <a href="my-tickets.html" class="icon-btn" title="My Tickets">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span class="cart-badge cart-count">0</span>
+                    </a>
+                    <a href="profile.html" class="icon-btn" id="userAvatar" title="Profile">A</a>
+                    <a href="organizer-dashboard.html" class="btn btn-secondary organizer-only" style="display:none;">Dashboard</a>
+                    <a href="#" id="logoutBtn" class="btn btn-sm" style="background:#ef4444;color:white;">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <h1>My Tickets</h1>
+        <p>All your booked events in one place — ready to scan!</p>
+    </div>
+</div>
+
+<!-- Tickets Section -->
+<div class="tickets-container">
+    <div id="ticketsContainer" class="tickets-grid">
+        <!-- Tickets will be injected here -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="empty-state" style="display:none;">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+        </svg>
+        <h3>No tickets yet</h3>
+        <p style="font-size:1.2rem;color:#64748b;max-width:500px;margin:1.5rem auto;">
+            Once you book an event, your tickets will appear here with a unique scannable QR code.
+        </p>
+        <a href="category.html" class="btn btn-primary" style="padding:1.2rem 3rem;font-size:1.2rem;">
+            Browse Events
+        </a>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="footer-section">
+            <h3 class="logo" style="color:white;">Eventa</h3>
+            <p>Your gateway to unforgettable experiences.</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Eventa. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+// === My Tickets Page - Final Version ===
+document.addEventListener('DOMContentLoaded', () => {
+    const user = getCurrentUser();
+    if (!user) {
+        showToast('Please log in to view your tickets', 'warning');
+        setTimeout(() => location.href = 'login.html', 1500);
+        return;
+    }
+
+    const orders = JSON.parse(localStorage.getItem('purchased_tickets') || '[]');
+    const container = document.getElementById('ticketsContainer');
+    const emptyState = document.getElementById('emptyState');
+
+    if (orders.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+    }
+
+    // Sort by newest first
+    orders.reverse();
+
+    orders.forEach((order) => {
+        order.items.forEach((item, idx) => {
+            // Generate unique ticket ID
+            const ticketNumber = String(orders.indexOf(order) + 1).padStart(4, '0') + 
+                               String(idx + 1).padStart(3, '0');
+            const ticketId = `EVT-${order.orderId.slice(-8).toUpperCase()}-${ticketNumber}`;
+
+            // QR Code Data
+            const qrData = JSON.stringify({
+                ticketId,
+                orderId: order.orderId,
+                eventTitle: item.eventTitle,
+                ticketType: item.ticketType,
+                quantity: item.quantity,
+                holderName: user.name,
+                holderEmail: user.email,
+                purchaseDate: order.date,
+                totalPaid: order.total,
+                valid: true
+            });
+
+            const ticketDiv = document.createElement('div');
+            ticketDiv.className = 'ticket-card';
+            ticketDiv.innerHTML = `
+                <div class="ticket-status">Confirmed</div>
+                <div class="ticket-header">
+                    <h3>${item.eventTitle}</h3>
+                    <div class="ticket-id">${ticketId}</div>
+                </div>
+                <div class="ticket-body">
+                    <div class="ticket-info">
+                        <div><strong>Ticket Holder</strong><br>${user.name}</div>
+                        <div><strong>Type</strong><br>${item.ticketType.toUpperCase()}</div>
+                        <div><strong>Quantity</strong><br>${item.quantity} ticket${item.quantity > 1 ? 's' : ''}</div>
+                        <div><strong>Total Paid</strong><br>$${order.total.toFixed(2)}</div>
+                        <div><strong>Purchase Date</strong><br>${new Date(order.date).toLocaleDateString('en-US', { 
+                            weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' 
+                        })}</div>
+                        <div><strong>Status</strong><br><span style="color:#10b981;font-weight:700;">Active & Valid</span></div>
+                    </div>
+
+                    <div class="qr-section">
+                        <div id="qr-${order.orderId}-${idx}"></div>
+                        <small class="qr-label">Scan at entrance • Valid for ${item.quantity} person${item.quantity > 1 ? 's' : ''}</small>
+                    </div>
+
+                    <div class="ticket-actions">
+                        <button class="btn-print" onclick="window.print()">
+                            Print Ticket
+                        </button>
+                        <button class="btn-download" onclick="showToast('PDF download coming soon!', 'info')">
+                            Download PDF
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(ticketDiv);
+
+            // Generate QR Code
+            setTimeout(() => {
+                new QRCode(document.getElementById(`qr-${order.orderId}-${idx}`), {
+                    text: qrData,
+                    width: 220,
+                    height: 220,
+                    colorDark: "#1e293b",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }, 100);
+        });
+    });
+
+    // Show success message if coming from checkout
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('from') === 'checkout') {
+        showToast('Tickets added successfully!', 'success', 6000);
+        history.replaceState({}, '', 'my-tickets.html');
+    }
+});
+</script>
+
+</body>
+</html>

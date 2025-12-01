@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="pageTitle">Create Event - Eventa</title>
+    <meta name="description" content="Create and publish your event on Eventa - the world's leading event platform." />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background:#f8fafc; }
+        .page-header {
+            text-align:center;
+            padding:5rem 0 3rem;
+            background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(139,92,246,0.06));
+        }
+        .page-header h1 {
+            font-size:3.5rem;
+            font-weight:800;
+            background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));
+            -webkit-background-clip:text;
+            background-clip:text;
+            -webkit-text-fill-color:transparent;
+            margin:0 0 1rem;
+        }
+
+        .form-container {
+            max-width:1000px;
+            margin:0 auto 5rem;
+            background:white;
+            border-radius:28px;
+            box-shadow:var(--shadow-xl);
+            overflow:hidden;
+        }
+
+        .form-header {
+            background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));
+            color:white;
+            padding:3rem 2rem;
+            text-align:center;
+        }
+        .form-header h2 {
+            font-size:2.6rem;
+            margin:0 0 0.8rem;
+            font-weight:800;
+        }
+        .form-header p {
+            font-size:1.2rem;
+            opacity:0.95;
+        }
+
+        .form-body {
+            padding:3.5rem 3rem;
+        }
+
+        .form-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+            gap:2rem;
+            margin-bottom:2rem;
+        }
+
+        .form-group {
+            margin-bottom:1.8rem;
+        }
+        .form-group label {
+            display:block;
+            margin-bottom:0.7rem;
+            font-weight:600;
+            color:var(--text-primary);
+            font-size:1.05rem;
+        }
+        .form-group label span { color:#ef4444; }
+
+        .form-control {
+            width:100%;
+            padding:1.9rem 1.3rem;
+            border:2.5px solid #e2e8f0;
+            border-radius:16px;
+            font-size:1.05rem;
+            transition:var(--transition);
+        }
+        .form-control:focus {
+            border-color:var(--primary-color);
+            box-shadow:0 0 0 5px rgba(99,102,241,0.12);
+        }
+        textarea.form-control { min-height:140px; resize:vertical; }
+
+        .ticket-types-section {
+            margin:3.5rem 0;
+            padding:2.5rem;
+            background:#f8fafc;
+            border-radius:20px;
+            border:2px dashed #e0e7ff;
+        }
+        .ticket-type {
+            background:white;
+            border:2px solid transparent;
+            border-radius:18px;
+            padding:2rem;
+            margin-bottom:1.5rem 0;
+            box-shadow:var(--shadow-md);
+            transition:var(--transition);
+        }
+        .ticket-type:hover {
+            border-color:var(--primary-color);
+            transform:translateY(-4px);
+            box-shadow:var(--shadow-lg);
+        }
+
+        .ticket-grid {
+            display:grid;
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:1.5rem;
+            align-items:end;
+        }
+
+        .remove-ticket-btn {
+            background:#ef4444;
+            color:white;
+            border:none;
+            padding:0.7rem 1.2rem;
+            border-radius:12px;
+            font-weight:600;
+            cursor:pointer;
+            transition:var(--transition);
+        }
+        .remove-ticket-btn:hover {
+            background:#dc2626;
+            transform:scale(1.05);
+        }
+
+        .btn-add-ticket {
+            background:transparent;
+            color:var(--primary-color);
+            border:2px dashed var(--primary-color);
+            padding:1rem 2rem;
+            border-radius:16px;
+            font-weight:600;
+            width:100%;
+            margin-top:1rem;
+            transition:var(--transition);
+        }
+        .btn-add-ticket:hover {
+            background:rgba(99,102,241,0.08);
+        }
+
+        .form-actions {
+            display:flex;
+            gap:1.5rem;
+            margin-top:4rem;
+            flex-wrap:wrap;
+        }
+        .btn-submit {
+            flex:1;
+            padding:1.4rem;
+            font-size:1.3rem;
+            font-weight:700;
+            border-radius:18px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-overlay"></div>
+
+<header class="header">
+    <div class="container">
+        <nav class="navbar">
+            <a href="index.html" class="logo">Eventa</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+            </button>
+
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="category.html" class="nav-link">Events</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <div class="guest-only">
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <a href="register.html" class="btn btn-primary">Sign Up</a>
+                </div>
+                <div class="user-only" style="display:none;align-items:center;gap:12px;">
+                    <a href="Notifications.html" class="icon-btn" title="Notifications">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="notification-badge notification-count">0</span>
+                    </a>
+                    <a href="my-tickets.html" class="icon-btn" title="My Tickets">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span class="cart-badge cart-count">0</span>
+                    </a>
+                    <a href="profile.html" class="icon-btn" id="userAvatar" title="Profile">A</a>
+                    <a href="organizer-dashboard.html" class="btn btn-secondary organizer-only" style="display:none;">Dashboard</a>
+                    <a href="#" id="logoutBtn" class="btn btn-sm" style="background:#ef4444;color:white;">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div class="page-header">
+    <div class="container">
+        <h1 id="mainTitle">Create New Event</h1>
+        <p style="font-size:1.3rem;color:var(--text-secondary);max-width:700px;margin:0 auto;">
+            Share your amazing event with millions of attendees worldwide
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="form-container">
+        <div class="form-header">
+            <h2 id="formTitle">Create Your Event</h2>
+            <p>Fill in the details below to publish your event</p>
+        </div>
+
+        <div class="form-body">
+            <form id="createEventForm">
+                <!-- Basic Info -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Event Title <span>*</span></label>
+                        <input type="text" id="eventTitle" class="form-control" placeholder="e.g. Summer Music Festival 2025" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category <span>*</span></label>
+                        <select id="eventCategory" class="form-control" required>
+                            <option value="">Select category</option>
+                            <option value="music">Music</option>
+                            <option value="sports">Sports</option>
+                            <option value="technology">Technology</option>
+                            <option value="arts">Arts & Culture</option>
+                            <option value="food">Food & Drink</option>
+                            <option value="business">Business</option>
+                            <option value="health">Health & Wellness</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Description <span>*</span></label>
+                    <textarea id="eventDescription" class="form-control" placeholder="Describe your event, highlights, lineup, what attendees can expect..." required></textarea>
+                </div>
+
+                <!-- Date & Location -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Start Date <span>*</span></label>
+                        <input type="date" id="dateFrom" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date (optional)</label>
+                        <input type="date" id="dateTo" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Time <span>*</span></label>
+                        <input type="time" id="eventTime" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Venue / Location <span>*</span></label>
+                        <input type="text" id="eventLocation" class="form-control" placeholder="e.g. Central Park, New York" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Capacity (optional)</label>
+                        <input type="number" id="eventCapacity" class="form-control" placeholder="e.g. 10000" min="1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Event Image URL (optional)</label>
+                    <input type="url" id="eventImage" class="form-control" placeholder="https://example.com/event-banner.jpg">
+                    <small style="color:#64748b;">We'll use a placeholder if left empty</small>
+                </div>
+
+                <!-- Ticket Types -->
+                <div class="ticket-types-section">
+                    <h3 style="margin:0 0 2rem;font-size:1.8rem;color:var(--text-primary);">Ticket Types</h3>
+                    <div id="ticketTypesContainer">
+                        <!-- First ticket (default) -->
+                        <div class="ticket-type">
+                            <div class="ticket-grid">
+                                <div class="form-group">
+                                    <label>Ticket Name</label>
+                                    <input type="text" class="ticket-name form-control" value="Regular" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Price ($)</label>
+                                    <input type="number" step="0.01" class="ticket-price form-control" value="89.00" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Available Quantity</label>
+                                    <input type="number" class="ticket-quantity form-control" value="1000" min="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="remove-ticket-btn" onclick="this.closest('.ticket-type').remove()">
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" id="addTicketBtn" class="btn-add-ticket">
+                        + Add Another Ticket Type
+                    </button>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="submitBtn" class="btn btn-primary btn-submit">
+                        Publish Event
+                    </button>
+                    <a href="organizer-dashboard.html" class="btn btn-outline btn-submit">
+                        Cancel
+                    Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="footer-section">
+            <h3 class="logo" style="color:white;">Eventa</h3>
+            <p>Your gateway to unforgettable experiences.</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 Eventa. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+// === Create/Edit Event Page Logic ===
+document.addEventListener('DOMContentLoaded', () => {
+    // Protect page - only organizers
+    if (getUserRole() !== 'organizer') {
+        showToast('Only organizers can create events', 'error');
+        setTimeout(() => location.href = 'index.html', 1800);
+        return;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const editId = urlParams.get('edit');
+
+    let isEditMode = false;
+    let editingEvent = null;
+
+    // Load event for editing
+    if (editId) {
+        isEditMode = true;
+        document.getElementById('mainTitle').textContent = 'Edit Event';
+        document.getElementById('formTitle').textContent = 'Edit Your Event';
+        document.querySelector('#submitBtn').textContent = 'Update Event';
+
+        const events = JSON.parse(localStorage.getItem('organizer_events') || '[]');
+        editingEvent = events.find(e => e.id === editId);
+
+        if (editingEvent) {
+            document.getElementById('eventTitle').value = editingEvent.title || '';
+            document.getElementById('eventCategory').value = editingEvent.category || '';
+            document.getElementById('eventDescription').value = editingEvent.description || '';
+            document.getElementById('dateFrom').value = editingEvent.dateFrom || '';
+            document.getElementById('dateTo').value = editingEvent.dateTo || '';
+            document.getElementById('eventTime').value = editingEvent.time || '';
+            document.getElementById('eventLocation').value = editingEvent.location || '';
+            document.getElementById('eventCapacity').value = editingEvent.capacity || '';
+            document.getElementById('eventImage').value = editingEvent.image || '';
+
+            // Clear and repopulate tickets
+            const container = document.getElementById('ticketTypesContainer');
+            container.innerHTML = '';
+            editingEvent.tickets.forEach(t => addTicketType(t.name, t.price, t.quantityAvailable));
+        }
+    }
+
+    // Add new ticket type
+    document.getElementById('addTicketBtn').addEventListener('click', () => {
+        addTicketType();
+    });
+
+    function addTicketType(name = '', price = '', qty = '') {
+        const container = document.getElementById('ticketTypesContainer');
+        const div = document.createElement('div');
+        div.className = 'ticket-type';
+        div.innerHTML = `
+            <div class="ticket-grid">
+                <div class="form-group">
+                    <label>Ticket Name <span>*</span></label>
+                    <input type="text" class="ticket-name form-control" value="${name}" placeholder="e.g. VIP" required>
+                </div>
+                <div class="form-group">
+                    <label>Price ($)<span>*</span></label>
+                    <input type="number" step="0.01" class="ticket-price form-control" value="${price}" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label>Available Quantity <span>*</span></label>
+                    <input type="number" class="ticket-quantity form-control" value="${qty}" min="1" required>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="remove-ticket-btn" onclick="this.closest('.ticket-type').remove()">
+                        Remove
+                    </button>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+
+    // Form submit
+    document.getElementById('createEventForm').addEventListener('submit', e => {
+        e.preventDefault();
+
+        const title = document.getElementById('eventTitle').value.trim();
+        const category = document.getElementById('eventCategory').value;
+        const description = document.getElementById('eventDescription').value.trim();
+        const dateFrom = document.getElementById('dateFrom').value;
+        const dateTo = document.getElementById('dateTo').value || dateFrom;
+        const time = document.getElementById('eventTime').value;
+        const location = document.getElementById('eventLocation').value.trim();
+        const capacity = document.getElementById('eventCapacity').value || null;
+        const image = document.getElementById('eventImage').value || `https://via.placeholder.com/1200x600/6366f1/ffffff?text=${encodeURIComponent(title)}`;
+
+        if (!title || !category || !description || !dateFrom || !time || !location) {
+            showToast('Please fill all required fields', 'error');
+            return;
+        }
+
+        const tickets = [];
+        document.querySelectorAll('.ticket-type').forEach(t => {
+            const name = t.querySelector('.ticket-name').value.trim();
+            const price = parseFloat(t.querySelector('.ticket-price').value);
+            const qty = parseInt(t.querySelector('.ticket-quantity').value);
+
+            if (name && price >= 0 && qty > 0) {
+                tickets.push({ name, price, quantityAvailable: qty });
+            }
+        });
+
+        if (tickets.length === 0) {
+            showToast('Add at least one ticket type', 'error');
+            return;
+        }
+
+        const eventData = {
+            id: isEditMode ? editId : Date.now().toString(),
+            title,
+            category,
+            description,
+            dateFrom,
+            dateTo: dateTo,
+            time,
+            location,
+            capacity: capacity ? parseInt(capacity) : null,
+            image,
+            tickets,
+            status: 'active',
+            createdAt: new Date().toISOString(),
+            organizerId: getCurrentUser().id
+        };
+
+        let events = JSON.parse(localStorage.getItem('organizer_events') || '[]');
+        if (isEditMode) {
+            events = events.map(e => e.id === editId ? eventData : e);
+        } else {
+            events.push(eventData);
+        }
+        localStorage.setItem('organizer_events', JSON.stringify(events));
+
+        showToast(isEditMode ? 'Event updated successfully!' : 'Event created successfully!', 'success');
+
+        setTimeout(() => {
+            location.href = 'organizer-dashboard.html';
+        }, 1500);
+    });
+});
+</script>
+
+</body>
+</html>

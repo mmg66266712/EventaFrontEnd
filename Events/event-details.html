@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="pageTitle">Event Details - Eventa</title>
+    <meta name="description" content="Book your tickets now for the best events." />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .event-hero { position: relative; height: 75vh; min-height: 500px; overflow: hidden; }
+        .event-hero img { width: 100%; height: 100%; object-fit: cover; transition: transform 12s ease; }
+        .event-hero:hover img { transform: scale(1.08); }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent 35%); }
+        .hero-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 3rem 1.5rem; color: white; }
+        .category-badge { display: inline-block; background: var(--primary-color); padding: 0.6rem 1.4rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; }
+
+        .event-details-body { 
+            display: grid; 
+            grid-template-columns: 1fr 420px; 
+            gap: 3rem; 
+            margin: 4rem auto; 
+            max-width: 1300px;
+            padding: 0 1rem;
+        }
+        @media (max-width: 992px) { 
+            .event-details-body { grid-template-columns: 1fr; }
+            .booking-card { position: static; }
+        }
+
+        .info-card { 
+            background: white; 
+            padding: 2.5rem; 
+            border-radius: 20px; 
+            box-shadow: var(--shadow-lg); 
+            margin-bottom: 2rem; 
+        }
+        .info-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 1.8rem; 
+            margin-top: 1rem;
+        }
+        .info-item strong { 
+            display: block; 
+            color: var(--text-primary); 
+            font-size: 1.05rem; 
+            margin-bottom: 0.5rem; 
+        }
+
+        .booking-card { 
+            position: sticky; 
+            top: 100px; 
+            background: white; 
+            border-radius: 24px; 
+            box-shadow: var(--shadow-xl); 
+            padding: 2.5rem; 
+            align-self: start;
+        }
+        .price-header { text-align: center; margin-bottom: 2rem; }
+        .starting-price { color: var(--text-secondary); font-size: 1rem; }
+        .main-price { font-size: 3.5rem; font-weight: 800; color: var(--primary-color); margin: 0.5rem 0; }
+
+        .ticket-option {
+            display: block;
+            padding: 1.2rem;
+            border: 2.5px solid #e2e8f0;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .ticket-option:hover { border-color: var(--primary-color); background: #f8faff; }
+        .ticket-option input:checked + .ticket-label { border-color: var(--primary-color); background: #f0f5ff; }
+        .ticket-option input { display: none; }
+        .ticket-label { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+
+        .quantity-controls { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 1.5rem; 
+            margin: 2rem 0; 
+        }
+        .qty-btn { 
+            width: 56px; height: 56px; 
+            border-radius: 50%; 
+            background: #f1f5f9; 
+            font-size: 1.8rem; 
+            font-weight: bold;
+            transition: var(--transition);
+        }
+        .qty-btn:hover { background: var(--primary-color); color: white; }
+        #ticketQty { 
+            width: 90px; 
+            text-align: center; 
+            padding: 1rem; 
+            font-size: 1.4rem; 
+            font-weight: 600;
+            border: 2px solid #e2e8f0; 
+            border-radius: 14px;
+        }
+
+        .price-summary { 
+            background: #f8fafc; 
+            padding: 1.8rem; 
+            border-radius: 16px; 
+            margin: 2rem 0; 
+        }
+        .price-row { display: flex; justify-content: space-between; margin: 0.8rem 0; }
+        .total-row { border-top: 2px solid #e2e8f0; padding-top: 1.2rem; font-size: 1.5rem; font-weight: 700; }
+        .total-amount { color: var(--primary-color); font-size: 1.8rem; }
+
+        #addToCartBtn { 
+            width: 100%; 
+            padding: 1.4rem; 
+            font-size: 1.3rem; 
+            font-weight: 700; 
+            margin-top: 1rem;
+        }
+        .btn-favorite {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            font-weight: 600;
+        }
+        .btn-favorite.active { background: #ec4899; color: white; }
+
+        .guarantees { 
+            margin-top: 2rem; 
+            padding-top: 1.8rem; 
+            border-top: 2px dashed #e2e8f0; 
+            font-size: 0.95rem; 
+            color: var(--text-secondary); 
+        }
+        .guarantee-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.7rem; 
+            margin-bottom: 0.8rem; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-overlay"></div>
+
+<header class="header">
+    <div class="container">
+        <nav class="navbar">
+            <a href="index.html" class="logo">Eventa</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+            </button>
+
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="category.html" class="nav-link">Events</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <div class="guest-only">
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <a href="register.html" class="btn btn-primary">Sign Up</a>
+                </div>
+
+                <div class="user-only" style="display:none;align-items:center;gap:12px;">
+                    <a href="Notifications.html" class="icon-btn" title="Notifications">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="notification-badge notification-count">0</span>
+                    </a>
+
+                    <a href="my-tickets.html" class="icon-btn" title="My Tickets">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span class="cart-badge cart-count">0</span>
+                    </a>
+
+                    <a href="profile.html" class="icon-btn" id="userAvatar" title="Profile">A</a>
+
+                    <a href="organizer-dashboard.html" class="btn btn-secondary organizer-only" style="display:none;">Dashboard</a>
+                    <a href="#" id="logoutBtn" class="btn btn-sm" style="background:#ef4444;color:white;">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Event Hero -->
+<section class="event-hero">
+    <img id="heroImage" src="" alt="">
+    <div class="event-overlay"></div>
+    <div class="hero-content container">
+        <span id="categoryBadge" class="category-badge">Loading...</span>
+        <h1 id="eventTitle" style="font-size:3.8rem;margin:1rem 0;line-height:1.1;">Loading Event...</h1>
+        <p id="eventSubtitle" style="font-size:1.4rem;opacity:0.95;">Please wait...</p>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section style="padding:5rem 0;background:#f8fafc;">
+    <div class="event-details-body">
+
+        <!-- Left Column -->
+        <div>
+            <div class="info-card">
+                <h2>Event Information</h2>
+                <div class="info-grid" id="infoGrid">
+                    <div><strong>Date</strong><span id="eventDate">-</span></div>
+                    <div><strong>Time</strong><span id="eventTime">-</span></div>
+                    <div><strong>Location</strong><span id="eventLocation">-</span></div>
+                    <div><strong>Organizer</strong><span id="eventOrganizer">-</span></div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h2>About This Event</h2>
+                <p id="eventDescription" style="line-height:1.9;color:#4b5563;font-size:1.1rem;">
+                    Loading description...
+                </p>
+            </div>
+
+            <div class="info-card">
+                <h2>Why You'll Love It</h2>
+                <ul style="list-style:none;padding:0;">
+                    <li class="guarantee-item">50+ world-class artists</li>
+                    <li class="guarantee-item">Multiple stages & genres</li>
+                    <li class="guarantee-item">Food trucks & VIP areas</li>
+                    <li class="guarantee-item">Free shuttle service</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Booking Card -->
+        <div class="booking-card">
+            <div class="price-header">
+                <div class="starting-price">Starting from</div>
+                <div class="main-price" id="startingPrice">$--</div>
+            </div>
+
+            <form id="ticketForm">
+                <div id="ticketOptions">
+                    <!-- Tickets injected by JS -->
+                </div>
+
+                <div class="quantity-controls">
+                    <button type="button" class="qty-btn btn-decrease">-</button>
+                    <input type="number" id="ticketQty" value="1" min="1" max="10" readonly>
+                    <button type="button" class="qty-btn btn-increase">+</button>
+                </div>
+
+                <div class="price-summary">
+                    <div class="price-row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+                    <div class="price-row"><span>Service Fee (10%)</span><span id="fee">$0.00</span></div>
+                    <div class="total-row price-row">
+                        <span>Total</span>
+                        <span class="total-amount" id="totalPrice">$0.00</span>
+                    </div>
+                </div>
+
+                <button type="button" id="addToCartBtn" class="btn btn-primary btn-loading-hidden">
+                    <span>Add to Cart</span>
+                </button>
+
+                <button type="button" class="btn btn-outline btn-favorite">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    Save Event
+                </button>
+
+                <div class="guarantees">
+                    <div class="guarantee-item">Instant confirmation</div>
+                    <div class="guarantee-item">Mobile tickets accepted</div>
+                    <div class="guarantee-item">Free cancellation (24h)</div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="footer-section">
+            <h3 class="logo" style="color:white;">Eventa</h3>
+            <p>Your gateway to unforgettable experiences.</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 Eventa. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+// === Event Details Dynamic Logic ===
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventId = urlParams.get('id');
+
+    // Mock Database (هيتبدّل بالـ API بعدين)
+    const eventsDB = {
+        "1": {
+            title: "Summer Music Festival 2024",
+            subtitle: "The biggest music event of the summer is back!",
+            category: "Music",
+            date: "June 15-17, 2025",
+            time: "6:00 PM - 11:00 PM",
+            location: "Central Park, New York",
+            organizer: "Music Events Inc.",
+            image: "uploads/eventa1.jpg",
+            description: "Join us for the most anticipated music festival of the summer! Over 50 international artists, multiple stages, food trucks, art installations and non-stop entertainment for 3 incredible days.",
+            tickets: [
+                { type: "regular", name: "Regular", desc: "General admission", price: 89 },
+                { type: "vip", name: "VIP", desc: "Premium viewing + lounge access", price: 199 },
+                { type: "premium", name: "Premium", desc: "All benefits + backstage pass", price: 349 }
+            ]
+        },
+        "2": {
+            title: "Global Tech Summit 2025",
+            subtitle: "Where innovation meets the future",
+            category: "Technology",
+            date: "July 22, 2025",
+            time: "9:00 AM - 6:00 PM",
+            location: "Dubai World Trade Centre",
+            organizer: "Tech Leaders LLC",
+            image: "uploads/eventa3.jpg",
+            description: "The largest technology conference in the Middle East. 200+ speakers, workshops, startup pitch, and networking opportunities.",
+            tickets: [
+                { type: "standard", name: "Standard", desc: "Full access to all sessions", price: 299 },
+                { type: "premium", name: "Premium", desc: "Front row + workshop access", price: 599 },
+                { type: "vip", name: "VIP", desc: "All access + dinner with speakers", price: 999 }
+            ]
+        }
+        // أضيفي قد ما تحبي
+    };
+
+    const event = eventsDB[eventId] || eventsDB["1"];
+
+    // Update Page Content
+    document.getElementById('pageTitle').textContent = `${event.title} - Eventa`;
+    document.getElementById('heroImage').src = event.image;
+    document.getElementById('heroImage').alt = event.title;
+    document.getElementById('categoryBadge').textContent = event.category;
+    document.getElementById('eventTitle').textContent = event.title;
+    document.getElementById('eventSubtitle').textContent = event.subtitle;
+    document.getElementById('eventDate').textContent = event.date;
+    document.getElementById('eventTime').textContent = event.time;
+    document.getElementById('eventLocation').textContent = event.location;
+    document.getElementById('eventOrganizer').textContent = event.organizer;
+    document.getElementById('eventDescription').textContent = event.description;
+    document.getElementById('startingPrice').textContent = `$${event.tickets[0].price}`;
+
+    // Inject Ticket Options
+    const ticketOptions = document.getElementById('ticketOptions');
+    event.tickets.forEach((t, i) => {
+        const isChecked = i === 0 ? 'checked' : '';
+        ticketOptions.innerHTML += `
+            <label class="ticket-option">
+                <input type="radio" name="ticketType" value="${t.type}" data-price="${t.price}" ${isChecked}>
+                <span class="ticket-label">
+                    <div>
+                        <div class="ticket-name">${t.name}</div>
+                        <div class="ticket-desc">${t.desc}</div>
+                    </div>
+                    <strong>$${t.price}</strong>
+                </span>
+            </label>
+        `;
+    });
+
+    // Price Calculation
+    const updateTotal = () => {
+        const qty = parseInt(document.getElementById('ticketQty').value) || 1;
+        const price = parseFloat(document.querySelector('input[name="ticketType"]:checked').dataset.price);
+        const subtotal = price * qty;
+        const fee = subtotal * 0.10;
+        const total = subtotal + fee;
+
+        document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('fee').textContent = `$${fee.toFixed(2)}`;
+        document.getElementById('totalPrice').textContent = `$${total.toFixed(2)}`;
+    };
+
+    // Quantity Buttons
+    document.querySelector('.btn-increase').addEventListener('click', () => {
+        if (document.getElementById('ticketQty').value < 10) {
+            document.getElementById('ticketQty').value++;
+            updateTotal();
+        }
+    });
+    document.querySelector('.btn-decrease').addEventListener('click', () => {
+        if (document.getElementById('ticketQty').value > 1) {
+            document.getElementById('ticketQty').value--;
+            updateTotal();
+        }
+    });
+
+    // Ticket Type Change
+    document.querySelectorAll('input[name="ticketType"]').forEach(radio => {
+        r.addEventListener('change', updateTotal);
+    });
+
+    // Add to Cart
+    document.getElementById('addToCartBtn').addEventListener('click', () => {
+        if (!getCurrentUser()) {
+            showToast('يجب تسجيل الدخول أولاً', 'warning');
+            setTimeout(() => location.href = 'login.html', 1500);
+            return;
+        }
+
+        const qty = parseInt(document.getElementById('ticketQty').value);
+        const selected = document.querySelector('input[name="ticketType"]:checked');
+        const type = selected.value.charAt(0).toUpperCase() + selected.value.slice(1);
+        const price = parseFloat(selected.dataset.price);
+
+        addToCart(eventId, event.title, type, price, qty);
+        showToast(`${qty} × ${type} tickets added to cart!`, 'success');
+    });
+
+    // Favorite Button
+    document.querySelector('.btn-favorite').addEventListener('click', function() {
+        this.classList.toggle('active');
+        const text = this.classList.contains('active') ? 'Event Saved' : 'Save Event';
+        const fill = this.classList.contains('active') ? 'currentColor' : 'none';
+        this.innerHTML = `<svg width="22" height="22" fill="${fill}" stroke="currentColor" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> ${text}`;
+    });
+
+    // Initial calculation
+    updateTotal();
+});
+</script>
+
+</body>
+</html>

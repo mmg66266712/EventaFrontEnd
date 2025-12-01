@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eventa - Discover & Book Amazing Events</title>
+    <meta name="description" content="Book tickets for concerts, conferences, sports, workshops and more with Eventa." />
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Google Fonts (اختياري بس حلو جدًا) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body>
+
+<!-- Mobile Overlay (للمنيو في الموبايل) -->
+<div class="mobile-overlay"></div>
+
+<header class="header">
+    <div class="container">
+        <nav class="navbar">
+            <a href="index.html" class="logo">Eventa</a>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+            </button>
+
+            <!-- Navigation Menu -->
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="category.html" class="nav-link">Events</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+
+            <!-- Nav Actions -->
+            <div class="nav-actions">
+
+                <!-- Guest Only -->
+                <div class="guest-only">
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <a href="register.html" class="btn btn-primary">Sign Up</a>
+                </div>
+
+                <!-- Authenticated User -->
+                <div class="user-only" style="display:none; align-items:center; gap:12px;">
+
+                    <!-- Notifications -->
+                    <a href="Notifications.html" class="icon-btn" title="Notifications">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="notification-badge notification-count">0</span>
+                    </a>
+
+                    <!-- Cart -->
+                    <a href="my-tickets.html" class="icon-btn" title="My Tickets">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span class="cart-badge cart-count">0</span>
+                    </a>
+
+                    <!-- Profile Avatar -->
+                    <a href="profile.html" class="icon-btn" id="userAvatar" title="Profile" style="width:44px;height:44px;background:var(--primary-color);color:white;font-weight:700;">
+                        A
+                    </a>
+
+                    <!-- Organizer Dashboard -->
+                    <a href="organizer-dashboard.html" class="btn btn-secondary organizer-only" style="display:none;">Dashboard</a>
+
+                    <!-- Logout -->
+                    <a href="#" id="logoutBtn" class="btn btn-sm" style="background:#ef4444;color:white;">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content fade-in">
+            <h1>Discover Amazing Events<br>Around You</h1>
+            <p class="section-subtitle">Book tickets for concerts, conferences, sports, workshops and more</p>
+
+            <div class="hero-search">
+                <input type="text" id="searchInput" placeholder="Search events, artists, venues..." autocomplete="off">
+                <button id="searchButton" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                    Search
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section style="padding:5rem 0;background:#f8fafc;">
+    <div class="container">
+        <h2 class="section-title">Browse by Category</h2>
+        <div class="category-filters" style="justify-content:center;">
+            <a href="category.html?cat=music" class="category-card" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">
+                <div style="font-size:4.5rem;margin-bottom:1rem;">Music</div>
+                <h3>Music</h3>
+                <p>Concerts & Festivals</p>
+            </a>
+            <a href="category.html?cat=sports" class="category-card" style="background:linear-gradient(135deg,#ec4899,#f59e0b);">
+                <div style="font-size:4.5rem;margin-bottom:1rem;">Sports</div>
+                <h3>Sports</h3>
+                <p>Matches & Tournaments</p>
+            </a>
+            <a href="category.html?cat=tech" class="category-card" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4);">
+                <div style="font-size:4.5rem;margin-bottom:1rem;">Tech</div>
+                <h3>Technology</h3>
+                <p>Conferences & Meetups</p>
+            </a>
+            <a href="category.html?cat=arts" class="category-card" style="background:linear-gradient(135deg,#d946ef,#f43f5e);">
+                <div style="font-size:4.5rem;margin-bottom:1rem;">Arts</div>
+                <h3>Arts & Culture</h3>
+                <p>Exhibitions & Shows</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Events -->
+<section style="padding:5rem 0;">
+    <div class="container">
+        <h2 class="section-title">Featured Events</h2>
+
+        <div class="events-grid">
+            <!-- Event Card 1 -->
+            <div class="event-card fade-in" data-event-id="1">
+                <img src="uploads/eventa1.jpg" alt="Summer Music Festival 2024" class="event-card-image">
+                <span class="event-card-badge">Featured</span>
+                <div class="event-card-content">
+                    <span class="event-card-category">Music</span>
+                    <h3 class="event-card-title">Summer Music Festival 2024</h3>
+                    <div class="event-card-info">
+                        <div class="event-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3.5V12a.5.5 0 0 1-1 0V8.5H4a.5.5 0 0 1 0-1h3V4.5A.5.5 0 0 1 8 4z"/></svg>
+                            June 15-17, 2024
+                        </div>
+                        <div class="event-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+                            Central Park, New York
+                        </div>
+                    </div>
+                    <div class="event-card-footer">
+                        <div class="event-price">$89</div>
+                        <a href="event-details.html?id=1" class="btn btn-primary btn-sm">Book Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ضيفي باقي الكروت بنفس الطريقة -->
+            <!-- مثال تاني عشان الشكل يبقى متنوع -->
+            <div class="event-card fade-in" data-event-id="2">
+                <img src="uploads/event2.jpg" alt="Tech Summit 2025" class="event-card-image">
+                <span class="event-card-badge">New</span>
+                <div class="event-card-content">
+                    <span class="event-card-category">Technology</span>
+                    <h3 class="event-card-title">Global Tech Summit 2025</h3>
+                    <div class="event-card-info">
+                        <div class="event-info-item">July 22, 2025</div>
+                        <div class="event-info-item">Dubai, UAE</div>
+                    </div>
+                    <div class="event-card-footer">
+                        <div class="event-price">$199</div>
+                        <a href="event-details.html?id=2" class="btn btn-primary btn-sm">Get Ticket</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- كرري قد ما تحبي -->
+        </div>
+
+        <div style="text-align:center;margin-top:3rem;">
+            <a href="category.html" class="btn btn-outline">View All Events →</a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="footer-section">
+            <h3 class="logo" style="color:white;font-size:1.8rem;margin-bottom:1rem;">Eventa</h3>
+            <p>Your gateway to unforgettable experiences.</p>
+        </div>
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul class="footer-links">
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Follow Us</h3>
+            <div style="display:flex;gap:1rem;margin-top:1rem;">
+                <a href="#" style="color:white;font-size:1.5rem;">Facebook</a>
+                <a href="#" style="color:white;font-size:1.5rem;">Twitter</a>
+                <a href="#" style="color:white;font-size:1.5rem;">Instagram</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Eventa. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Main JS -->
+<script src="js/main.js"></script>
+
+<!-- Hero Search Script -->
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+
+    const performSearch = () => {
+        const query = searchInput.value.trim();
+        if (query) {
+            localStorage.setItem('searchQuery', query);
+            window.location.href = 'category.html';
+        } else {
+            showToast('Please type something to search', 'warning');
+        }
+    };
+
+    searchButton.addEventListener('click', performSearch);
+    searchInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') performSearch();
+    });
+</script>
+
+</body>
+</html>

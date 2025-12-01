@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Eventa</title>
+    <meta name="description" content="Log in to your Eventa account and start discovering amazing events." />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 480px;
+            padding: 2rem 1.5rem;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 32px;
+            padding: 3.5rem 3rem;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+            text-align: center;
+            animation: floatIn 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .logo-large {
+            font-size: 800 3.2rem/1 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0 0 0.5rem;
+        }
+
+        .login-card h2 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin: 0 0 0.8rem;
+            color: #1e293b;
+        }
+
+        .login-card p {
+            color: #64748b;
+            font-size: 1.15rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 1.8rem;
+            text-align: left;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1.3rem 1.5rem;
+            border: 2.5px solid #e2e8f0;
+            border-radius: 18px;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 6px rgba(99,102,241,0.15);
+            outline: none;
+        }
+
+        .form-control.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 6px rgba(239,68,68,0.1);
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.92rem;
+            margin-top: 0.6rem;
+            display: block;
+            font-weight: 500;
+        }
+
+        .options-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1.5rem 0;
+            font-size: 0.98rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        .forgot-link {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .organizer-toggle {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 2px solid #0ea5e9;
+            border-radius: 18px;
+            padding: 1.2rem;
+            margin: 2rem 0;
+            font-weight: 600;
+            color: #0369a1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            font-size: 1.02rem;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1.4rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border-radius: 18px;
+            margin: 1.5rem 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(99,102,241,0.4);
+        }
+
+        .divider {
+            margin: 2.5rem 0;
+            color: #94a3b8;
+            position: relative;
+            font-weight: 500;
+        }
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+        }
+
+        .social-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-btn {
+            padding: 1rem;
+            border-radius: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .google-btn {
+            border: 2px solid #e2e8f0;
+            color: #5f6368a9;
+        }
+        .google-btn:hover { background:#f8fafc; }
+
+        .facebook-btn {
+            background: #1877f2;
+            color: white;
+        }
+        .facebook-btn:hover { background:#166fe5; }
+
+        .signup-link {
+            margin-top: 2.5rem;
+            color: #64748b;
+            font-size: 1.05rem;
+        }
+        .signup-link a {
+            color: var(--primary-color);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        @keyframes floatIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="logo-large">Eventa</div>
+
+        <h2>Welcome Back!</h2>
+        <p>Log in to continue your journey with amazing events</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" class="form-control" placeholder="you@example.com" required>
+                <span class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                <span class="error-message"></span>
+            </div>
+
+            <div class="options-row">
+                <label class="remember-me">
+                    <input type="checkbox" id="remember">
+                    Remember me
+                </label>
+                <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+
+            <!-- Organizer Login Toggle -->
+            <div class="organizer-toggle">
+                <input type="checkbox" id="loginAsOrganizer">
+                <span>Log in as Event Organizer</span>
+            </div>
+
+            <button type="submit" class="btn-login">
+                Login to Eventa
+            </button>
+        </form>
+
+        <div class="divider"><span>or continue with</span></div>
+
+        <div class="social-buttons">
+            <button type="button" class="social-btn google-btn">
+                Google
+            </button>
+            <button type="button" class="social-btn facebook-btn">
+                Facebook
+            </button>
+        </div>
+
+        <p class="signup-link">
+            Don't have an account? 
+            <a href="register.html">Sign up for free</a>
+        </p>
+    </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // If already logged in → redirect
+    if (getCurrentUser()) {
+        showToast('You are already logged in!', 'info');
+        setTimeout(() => location.href = 'index.html', 1200);
+        return;
+    }
+
+    const form = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passInput = document.getElementById('password');
+    const organizerToggle = document.getElementById('loginAsOrganizer');
+
+    // Clear previous errors
+    const clearErrors = () => {
+        document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+        document.querySelectorAll('.form-control').forEach(el => el.classList.remove('error'));
+    };
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearErrors();
+
+        const email = emailInput.value.trim();
+        const password = passInput.value;
+        const isOrganizer = organizerToggle.checked;
+
+        let valid = true;
+
+        if (!email || !email.includes('@') || !email.includes('.')) {
+            emailInput.classList.add('error');
+            emailInput.nextElementSibling.textContent = 'Please enter a valid email address';
+            valid = false;
+        }
+
+        if (password.length < 6) {
+            passInput.classList.add('error');
+            passInput.nextElementSibling.textContent = 'Password must be at least 6 characters';
+            valid = false;
+        }
+
+        if (!valid) return;
+
+        // === Fake login - replace with real API later ===
+        localStorage.setItem('userLoggedIn', 'true');
+        localStorage.setItem('userName', email.split('@')[0]);
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userRole', isOrganizer ? 'organizer' : 'user');
+        localStorage.setItem('userId', Date.now().toString());
+        localStorage.setItem('authToken', btoa(email + ':' + password));
+
+        // Success feedback
+        showToast(
+            isOrganizer 
+                ? 'Welcome back, Organizer!' 
+                : 'Login successful! Welcome back',
+            'success',
+            4000
+        );
+
+        addNotification(
+            'Logged In Successfully',
+            isOrganizer 
+                ? 'You are now logged in as an event organizer' 
+                : 'Welcome back to Eventa!',
+            'success'
+        );
+
+        // Redirect
+        setTimeout(() => {
+            window.location.href = isOrganizer 
+                ? 'organizer-dashboard.html' 
+                : 'index.html';
+        }, 1800);
+    });
+});
+</script>
+
+</body>
+</html>

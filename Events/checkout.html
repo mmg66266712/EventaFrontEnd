@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - Eventa</title>
+    <meta name="description" content="Complete your ticket purchase securely." />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background:#f8fafc; }
+        .checkout-header { text-align:center; padding:4rem 0 2rem; }
+        .checkout-header h1 { 
+            font-size:3.5rem; 
+            font-weight:800; 
+            background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+            margin:0;
+        }
+
+        .checkout-wrapper { 
+            max-width:1300px; 
+            margin:0 auto 5rem; 
+            display:grid; 
+            grid-template-columns:1fr 420px; 
+            gap:3rem; 
+            padding:0 1rem;
+        }
+        @media (max-width:992px) { 
+            .checkout-wrapper { grid-template-columns:1fr; }
+            .order-summary { position:static; }
+        }
+
+        .form-section, .order-summary {
+            background:white;
+            border-radius:24px;
+            box-shadow:var(--shadow-xl);
+            padding:2.8rem;
+            margin-bottom:2rem;
+        }
+
+        .section-title {
+            font-size:1.8rem;
+            font-weight:700;
+            margin-bottom:2rem;
+            color:var(--text-primary);
+            position:relative;
+            padding-bottom:0.8rem;
+        }
+        .section-title::after {
+            content:''; position:absolute; bottom:0; left:0; width:80px; height:4px;
+            background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));
+            border-radius:2px;
+        }
+
+        .form-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+            gap:1.8rem;
+        }
+
+        .form-control {
+            width:100%;
+            padding:1.1rem 1.4rem;
+            border:2.5px solid #e2e8f0;
+            border-radius:16px;
+            font-size:1.05rem;
+            transition:var(--transition);
+        }
+        .form-control:focus {
+            border-color:var(--primary-color);
+            box-shadow:0 0 0 5px rgba(99,102,241,0.15);
+        }
+
+        .cart-item {
+            display:flex;
+            align-items:center;
+            gap:1.8rem;
+            padding:1.8rem 0;
+            border-bottom:1px solid #f1f5f9;
+        }
+        .cart-item:last-child { border:none; padding-bottom:0; }
+        .cart-item img {
+            width:110px;
+            height:110px;
+            object-fit:cover;
+            border-radius:16px;
+            box-shadow:var(--shadow-md);
+        }
+        .item-details h4 {
+            font-size:1.3rem;
+            margin:0 0 0.5rem;
+            color:var(--text-primary);
+        }
+        .item-meta {
+            color:var(--text-secondary);
+            font-size:0.95rem;
+            margin:0.4rem 0;
+        }
+        .item-price {
+            font-size:1.5rem;
+            font-weight:800;
+            color:var(--primary-color);
+        }
+
+        .price-summary {
+            background:#f8fafc;
+            padding:2rem;
+            border-radius:20px;
+            margin:2rem 0;
+        }
+        .price-row {
+            display:flex;
+            justify-content:space-between;
+            margin:1rem 0;
+            font-size:1.15rem;
+        }
+        .total-row {
+            font-size:1.9rem;
+            font-weight:800;
+            color:var(--text-primary);
+            padding-top:1.5rem;
+            border-top:3px dashed #e2e8f0;
+        }
+        .total-amount { color:var(--primary-color); font-size:2.1rem; }
+
+        #completeCheckout {
+            width:100%;
+            padding:1.6rem;
+            font-size:1.5rem;
+            font-weight:800;
+            border:none;
+            border-radius:18px;
+            margin-top:1.5rem;
+            background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));
+            color:white;
+            cursor:pointer;
+            transition:var(--transition);
+        }
+        #completeCheckout:hover {
+            transform:translateY(-4px);
+            box-shadow:0 20px 40px rgba(99,102,241,0.35);
+        }
+        #completeCheckout.loading {
+            pointer-events:none;
+            opacity:0.8;
+        }
+        #completeCheckout.loading::after {
+            content:'';
+            width:24px;height:24px;
+            border:3px solid #fff;
+            border-top-color:transparent;
+            border-radius:50%;
+            animation:spin 1s linear infinite;
+            display:inline-block;
+            margin-left:12px;
+        }
+
+        .secure-notice {
+            background:linear-gradient(135deg,#f0fdf4,#dcfce7);
+            border:2px solid #86efac;
+            border-radius:20px;
+            padding:2rem;
+            text-align:center;
+            margin-top:2rem;
+        }
+        .secure-notice p { margin:0.8rem 0 0; color:#166534; font-weight:600; font-size:1.1rem; }
+
+        .empty-cart {
+            text-align:center;
+            padding:8rem 2rem;
+            background:white;
+            border-radius:24px;
+            box-shadow:var(--shadow-xl);
+        }
+        .empty-cart svg { width:140px; height:140px; opacity:0.3; margin-bottom:1.5rem; }
+    </style>
+</head>
+<body>
+
+<div class="mobile-overlay"></div>
+
+<header class="header">
+    <div class="container">
+        <nav class="navbar">
+            <a href="index.html" class="logo">Eventa</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+            </button>
+
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="category.html" class="nav-link">Events</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <div class="guest-only">
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <a href="register.html" class="btn btn-primary">Sign Up</a>
+                </div>
+                <div class="user-only" style="display:none;align-items:center;gap:12px;">
+                    <a href="Notifications.html" class="icon-btn" title="Notifications">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="notification-badge notification-count">0</span>
+                    </a>
+                    <a href="my-tickets.html" class="icon-btn" title="My Tickets">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span class="cart-badge cart-count">0</span>
+                    </a>
+                    <a href="profile.html" class="icon-btn" id="userAvatar" title="Profile">A</a>
+                    <a href="#" id="logoutBtn" class="btn btn-sm" style="background:#ef4444;color:white;">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div class="checkout-header">
+    <div class="container">
+        <h1>Complete Your Order</h1>
+        <p style="margin-top:1rem;color:var(--text-secondary);font-size:1.3rem;">You're just one step away from your tickets!</p>
+    </div>
+</div>
+
+<main class="container">
+    <div id="checkoutWrapper" class="checkout-wrapper">
+
+        <!-- Billing Form -->
+        <div>
+            <div class="form-section">
+                <h2 class="section-title">Billing Information</h2>
+                <div class="form-grid">
+                    <div>
+                        <label style="display:block;margin-bottom:0.6rem;font-weight:600;">Full Name <span style="color:#ef4444;">*</span></label>
+                        <input type="text" id="buyerName" class="form-control" placeholder="John Doe" required>
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:0.6rem;font-weight:600;">Email Address <span style="color:#ef4444;">*</span></label>
+                        <input type="email" id="buyerEmail" class="form-control" placeholder="you@example.com" required>
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:0.6rem;font-weight:600;">Phone Number <span style="color:#94a3b8;">(Optional)</span></label>
+                        <input type="tel" id="buyerPhone" class="form-control" placeholder="+20 100 123 4567">
+                    </div>
+                </div>
+            </div>
+
+            <div class="secure-notice">
+                <p style="font-size:3rem;margin:0;">Secure Lock Icon</p>
+                <p>Your payment information is encrypted with 256-bit SSL<br>All transactions are secure and protected</p>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <h2 class="section-title">Order Summary</h2>
+            <div id="cartItemsList"></div>
+
+            <div class="price-summary">
+                <div class="price-row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+                <div class="price-row"><span>Service Fee (10%)</span><span id="fee">$0.00</span></div>
+                <div class="total-row price-row">
+                    <span>Total</span>
+                    <span class="total-amount" id="totalPrice">$0.00</span>
+                </div>
+            </div>
+
+            <button id="completeCheckout" class="btn">
+                Complete Purchase
+            </button>
+
+            <p style="text-align:center;margin-top:1.5rem;color:#64748b;font-size:0.95rem;">
+                By completing this purchase, you agree to our 
+                <a href="#" style="color:var(--primary-color);font-weight:600;">Terms</a> & 
+                <a href="#" style="color:var(--primary-color);font-weight:600;">Privacy Policy</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Empty Cart -->
+    <div id="emptyCart" class="empty-cart" style="display:none;">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+        <h3>Your cart is empty</h3>
+        <p style="margin:1rem 0 2rem;color:#64748b;">Looks like you haven't added any tickets yet.</p>
+        <a href="category.html" class="btn btn-primary">Browse Events</a>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="footer-section">
+            <h3 class="logo" style="color:white;">Eventa</h3>
+            <p>Your gateway to unforgettable experiences.</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 Eventa. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+// === Checkout Page Logic ===
+document.addEventListener('DOMContentLoaded', () => {
+    // Redirect if not logged in
+    if (!getCurrentUser()) {
+        showToast('You must log in to complete the purchase.', 'warning');
+        setTimeout(() => location.href = 'login.html', 1800);
+        return;
+    }
+
+    const cart = getCart();
+    const itemsContainer = document.getElementById('cartItemsList');
+    const wrapper = document.getElementById('checkoutWrapper');
+    const emptyState = document.getElementById('emptyCart');
+    const checkoutBtn = document.getElementById('completeCheckout');
+
+    if (!cart || cart.length === 0) {
+        wrapper.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+    }
+
+    // Show checkout form
+    wrapper.style.display = 'grid';
+    emptyState.style.display = 'none';
+
+    // Fill user data
+    const user = getCurrentUser();
+    document.getElementById('buyerName').value = user.name;
+    document.getElementById('buyerEmail').value = user.email;
+
+    // Render cart items
+    let subtotal = 0;
+    itemsContainer.innerHTML = '';
+
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+            <img src="uploads/eventa1.jpg" alt="${item.eventTitle}" onerror="this.src='https://via.placeholder.com/110?text=Event'">
+            <div class="item-details">
+                <h4>${item.eventTitle}</h4>
+                <div class="item-meta">${item.quantity} × ${item.ticketType} Ticket</div>
+            </div>
+            <div class="item-price">$${itemTotal.toFixed(2)}</div>
+        `;
+        itemsContainer.appendChild(div);
+    });
+
+    const fee = subtotal * 0.10;
+    const total = subtotal + fee;
+
+    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById('fee').textContent = `$${fee.toFixed(2)}`;
+    document.getElementById('totalPrice').textContent = `$${total.toFixed(2)}`;
+
+    // Checkout Button
+    checkoutBtn.addEventListener('click', function() {
+        const name = document.getElementById('buyerName').value.trim();
+        const email = document.getElementById('buyerEmail').value.trim();
+
+        if (!name || !email) {
+            showToast('Please fill in both name and email.', 'error');
+            return;
+        }
+
+        if (this.classList.contains('loading')) return;
+
+        this.classList.add('loading');
+        this.innerHTML = 'Processing Payment...';
+
+        setTimeout(() => {
+            const orderId = 'ORD-' + Date.now().toString().slice(-9);
+
+            const order = {
+                orderId,
+                buyerName: name,
+                buyerEmail: email,
+                items: cart,
+                subtotal,
+                fee,
+                total,
+                date: new Date().toISOString(),
+                status: 'paid'
+            };
+
+            // Save to purchased tickets
+            let purchased = JSON.parse(localStorage.getItem('purchased_tickets') || '[]');
+            purchased.unshift(order);
+            localStorage.setItem('purchased_tickets', JSON.stringify(purchased));
+
+            // Clear cart
+            clearCart();
+
+            addNotification('Payment Successful!', `Your order number ${orderId} has been confirmed`, 'success');
+            showToast('Payment successful! Redirecting you...', 'success');
+
+            setTimeout(() => {
+                window.location.href = 'success.html?order=' + orderId;
+            }, 2200);
+        }, 2200);
+    });
+});
+</script>
+
+</body>
+</html>
